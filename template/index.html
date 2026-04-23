@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url("/static/images/BCA.webp") no-repeat center center fixed;
+            background-size: cover;
+            color: black;
+            text-align: center;
+        }
+
+        .container {
+            margin-top: 100px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: black;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            display: block;
+            width: 250px;
+            margin: 15px auto;
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .timetable {
+            background: #3498db;
+            color: black;
+        }
+
+        .syllabus {
+            background: #2ecc71;
+            color: black;
+        }
+
+        .notes {
+            background: #9b59b6;
+            color: black;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>🏠 Welcome to BCA</h1>
+        <p>Select what you want to open</p>
+
+        <!-- 🗓️ Timetable -->
+        <a href="{% url 'timetable' %}">
+            <button class="btn timetable">🗓️ Timetable</button>
+        </a>
+
+        <!-- 📚 Syllabus -->
+        <a href="{% url 'syllabus' %}">
+            <button class="btn syllabus">📚 Syllabus</button>
+        </a>
+
+        <!-- 📝 Notes (optional) -->
+        <a href="#">
+            <button class="btn notes">📝 Notes</button>
+        </a>
+
+    </div>
+
+</body>
+</html>

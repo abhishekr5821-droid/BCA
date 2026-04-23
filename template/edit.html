@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit Syllabus</title>
+<style>
+body {
+    background:#1e1e2f;
+    color:white;
+    text-align:center;
+}
+input {
+    padding:10px;
+    width:50%;
+}
+button {
+    padding:10px;
+    background:#4CAF50;
+    color:white;
+}
+</style>
+</head>
+
+<body>
+
+<h1>✏️ Edit Syllabus</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="title" value="{{ item.title }}">
+    <button type="submit">Update</button>
+</form>
+
+<br>
+
+<a href="/syllabus/">
+    <button>⬅ Back</button>
+</a>
+
+</body>
+</html>
+

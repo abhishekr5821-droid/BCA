@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Syllabus Manager</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1e1e2f;
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        .form-box {
+            margin: 20px;
+        }
+
+        input {
+            padding: 10px;
+            width: 250px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            margin: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .edit-btn {
+            background: orange;
+            color: white;
+        }
+
+        .delete-btn {
+            background: red;
+            color: white;
+        }
+
+        .card {
+            margin: 10px auto;
+            background: #2c2c3e;
+            padding: 15px;
+            border-radius: 10px;
+            width: 60%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        img {
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>📚 Syllabus Manager</h1>
+
+    <!-- ✅ ADD SYLLABUS (UPDATED WITH FILE UPLOAD) -->
+    <div class="form-box">
+        <form method="POST" action="{% url 'add_syllabus' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <input type="text" name="title" placeholder="Enter syllabus..." required>
+
+            <!-- NEW FILE INPUT -->
+            <input type="file" name="file" accept=".pdf,image/*">
+
+            <button type="submit" class="add-btn">Add</button>
+        </form>
+    </div>
+
+    <!-- 🏠 HOME BUTTON -->
+    <a href="{% url 'home' %}">
+        <button>🏠 Go to Home</button>
+    </a>
+
+    <!-- ✅ LIST -->
+    {% for item in data %}
+        <div class="card">
+
+            <div>
+                <span>{{ item.title }}</span><br>
+
+                <!-- SHOW FILE -->
+                {% if item.file %}
+                    {% if item.file.url|lower|slice:"-4:" == ".pdf" %}
+                        <a href="{{ item.file.url }}" target="_blank">📄 View PDF</a>
+                    {% else %}
+                        <img src="{{ item.file.url }}" width="120">
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="actions">
+                <!-- ✏️ EDIT -->
+                <a href="{% url 'edit_syllabus' item.id %}">
+                    <button class="edit-btn">Edit</button>
+                </a>
+
+                <!-- ❌ DELETE -->
+                <form action="{% url 'delete_syllabus' item.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-btn">Delete</button>
+                </form>
+            </div>
+
+        </div>
+    {% empty %}
+        <p>No syllabus added yet.</p>
+    {% endfor %}
+<!-- 🔽 OLD SIMPLE LIST (KEPT AS YOU ASKED) -->
+<h2>📜 Simple List View</h2>
+
+{% for item in data %}
+    <div class="card">
+
+        <span>{{ item.title }}</span>
+
+        <div class="actions">
+            <a href="{% url 'edit_syllabus' item.id %}">
+                <button class="edit-btn">Edit</button>
+            </a>
+
+            <form action="{% url 'delete_syllabus' item.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="delete-btn">Delete</button>
+            </form>
+        </div>
+
+    </div>
+{% endfor %}
+
+</body>
+</html>
