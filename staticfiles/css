@@ -1,0 +1,23 @@
+#timetableContainer {
+    margin-top: 20px;
+}
+
+.timetable-item {
+    background: #3a3a5a;
+    padding: 10px;
+    margin: 10px auto;
+    width: 50%;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ✅ FIXED BODY (removed dot) */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url("/static/images/BCA.webp") no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    text-align: center;
+}
