@@ -10,7 +10,8 @@ def home(request):
 
 # ✅ TIMETABLE
 def timetable(request):
-    return render(request, 'timetable.html')
+    data = Timetable.objects.all()
+    return render(request, 'timetable.html', {'data': data})
 
 
 # ✅ SYLLABUS VIEW
