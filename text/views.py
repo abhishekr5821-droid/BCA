@@ -10,9 +10,31 @@ def home(request):
 
 # ✅ TIMETABLE
 def timetable(request):
-    data = Timetable.objects.all()
-    return render(request, 'timetable.html', {'data': data})
+    if request.method == "POST":
+        Timetable.objects.all().delete()  # clear old data
 
+        days = ["Monday","Tuesday","Wednesday","Thursday","Friday"]
+
+        for day in days:
+            for p in range(1, 6):
+                subject = request.POST.get(f"{day}_{p}")
+
+                if subject:
+                    Timetable.objects.create(
+                        day=day,
+                        period=p,
+                        subject=subject
+                    )
+
+    data = Timetable.objects.all()
+
+    # convert DB data → table format
+    timetable_dict = {}
+
+    for entry in data:
+        timetable_dict.setdefault(entry.day, {})[entry.period] = entry.subject
+
+    return render(request, "timetable.html", {"table": timetable_dict})
 
 # ✅ SYLLABUS VIEW
 def syllabus_view(request):
