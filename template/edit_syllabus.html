@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Syllabus</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #1e1e2f;
+            color: white;
+            text-align: center;
+        }
+
+        .box {
+            margin-top: 100px;
+        }
+
+        input {
+            padding: 10px;
+            width: 250px;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background: orange;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+    <h1>Edit Syllabus</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <input type="text" name="title" value="{{ item.title }}" required><br>
+
+        <input type="file" name="file"><br>
+
+        <button type="submit">Update</button>
+    </form>
+
+    <br>
+    <a href="{% url 'syllabus' %}">
+        <button>⬅ Back</button>
+    </a>
+</div>
+
+</body>
+</html>
