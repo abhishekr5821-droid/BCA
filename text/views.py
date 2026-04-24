@@ -29,7 +29,6 @@ def timetable(request):
 
     data = Timetable.objects.all()
 
-    # convert DB data → table format
     timetable_dict = {}
 
     for entry in data:
@@ -37,26 +36,20 @@ def timetable(request):
 
     return render(request, "timetable.html", {"table": timetable_dict})
 
-# ✅ SYLLABUS VIEW
+
+# ✅ SYLLABUS VIEW (FIXED ❗)
 def syllabus_view(request):
-    if request.method == "POST":
-        title = request.POST.get("title")
-        file = request.FILES.get("file")  # 👈 ADDED
-
-        if title:
-            Syllabus.objects.create(title=title, file=file)
-
-        return redirect("syllabus")
+    # ❌ IMPORTANT FIX: removed Syllabus.objects.create from here
 
     data = Syllabus.objects.all()
     return render(request, "syllabus.html", {"data": data})
 
 
-# ✅ ADD SYLLABUS (UPDATED ONLY — NOT DUPLICATED)
+# ✅ ADD SYLLABUS (ONLY CREATE POINT)
 def add_syllabus(request):
     if request.method == "POST":
         title = request.POST.get('title')
-        file = request.FILES.get('file')  # 👈 ADDED
+        file = request.FILES.get('file')
 
         if title:
             Syllabus.objects.create(title=title, file=file)
@@ -64,14 +57,14 @@ def add_syllabus(request):
     return redirect('syllabus')
 
 
-# ✅ DELETE
+# ✅ DELETE SYLLABUS
 def delete_syllabus(request, syllabus_id):
     syllabus = get_object_or_404(Syllabus, id=syllabus_id)
     syllabus.delete()
     return redirect('syllabus')
 
 
-# ✅ UPDATE (kept as-is)
+# ✅ UPDATE SYLLABUS
 def update_syllabus(request, syllabus_id):
     syllabus = get_object_or_404(Syllabus, id=syllabus_id)
     if request.method == "POST":
@@ -83,7 +76,7 @@ def update_syllabus(request, syllabus_id):
     return render(request, 'update_syllabus.html', {'syllabus': syllabus})
 
 
-# ✅ EDIT (kept as-is)
+# ✅ EDIT SYLLABUS
 def edit_syllabus(request, syllabus_id):
     syllabus = get_object_or_404(Syllabus, id=syllabus_id)
     if request.method == "POST":
@@ -93,11 +86,15 @@ def edit_syllabus(request, syllabus_id):
             syllabus.save()
             return redirect('syllabus')
     return render(request, 'edit_syllabus.html', {'syllabus': syllabus})
+
+
+# ✅ NOTES PAGE
 def notes(request):
     data = Note.objects.all()
     return render(request, 'notes.html', {'data': data})
 
 
+# ✅ ADD NOTE
 def add_note(request):
     if request.method == "POST":
         title = request.POST.get("title")
@@ -108,6 +105,7 @@ def add_note(request):
     return redirect('notes')
 
 
+# ✅ DELETE NOTE
 def delete_note(request, id):
     note = Note.objects.get(id=id)
     note.delete()
