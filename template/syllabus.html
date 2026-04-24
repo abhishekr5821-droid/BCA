@@ -121,19 +121,16 @@ input {
         {% endif %}
 
         <!-- ACTIONS -->
-                <div class="actions">
+                 <div class="actions">
 
     <a href="{% url 'edit_syllabus' item.id %}">
         <button class="edit-btn">Edit</button>
     </a>
 
-    <!-- DELETE BUTTON HIDDEN -->
-    <!--
-    <form action="{% url 'delete_syllabus' item.id %}" method="POST" style="display:inline;">
-        {% csrf_token %}
-        <button class="delete-btn">Delete</button>
-    </form>
-    -->
+   <form action="{% url 'delete_syllabus' item.id %}" method="POST" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="delete-btn">Delete</button>
+</form>
 
 </div>
 
