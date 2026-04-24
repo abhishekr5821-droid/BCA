@@ -7,51 +7,85 @@
 <style>
 body {
     font-family: Arial;
-    background: #1e1e2f;
+    background: radial-gradient(circle at top, #0f2027, #0b0c1a);
     color: white;
     text-align: center;
 }
 
-table {
+/* TITLE */
+h1 {
+    margin-top: 30px;
+    letter-spacing: 2px;
+}
+
+/* LIVE CARD */
+.live-card {
+    width: 400px;
     margin: 20px auto;
-    border-collapse: collapse;
-    width: 90%;
+    padding: 20px;
+    border-radius: 15px;
+    background: #0c0c14;
+    box-shadow: 0 0 20px rgba(0,255,200,0.2);
+}
+
+.live-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.live-badge {
+    color: red;
+}
+
+.live-subject {
+    font-size: 28px;
+    color: orange;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.live-day {
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* TABLE */
+table {
+    margin: 30px auto;
+    border-collapse: separate;
+    border-spacing: 10px;
 }
 
 th, td {
-    border: 1px solid #555;
-    padding: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    background: #111;
+    min-width: 100px;
 }
 
-th { background: #4CAF50; }
-td { background: #2c2c3e; }
+/* DAY COLUMN */
+th {
+    background: #00c6ff;
+    color: black;
+}
 
+/* CURRENT CELL GLOW */
+.current {
+    background: #00ffcc !important;
+    color: black;
+    box-shadow: 0 0 15px #00ffcc;
+}
+
+/* LUNCH */
 .lunch {
     background: orange !important;
-    font-weight: bold;
-}
-
-.current {
-    background: #00c853 !important;
-    font-weight: bold;
-}
-
-input {
-    width: 100%;
-    border: none;
-    background: transparent;
-    color: white;
-    text-align: center;
+    color: black;
 }
 
 button {
-    padding: 8px 12px;
-    margin: 5px;
-    border-radius: 5px;
-    border: none;
-    background: #4CAF50;
-    color: white;
-    cursor: pointer;
+    margin-top: 20px;
 }
 </style>
 </head>
@@ -59,7 +93,15 @@ button {
 <body>
 
 <h1>📅 Timetable</h1>
-<h2 id="liveInfo">Loading...</h2>
+<div class="live-card">
+    <div class="live-header">
+        <span class="live-badge">🔴 LIVE</span>
+        <span id="liveTime">--:--:--</span>
+    </div>
+
+    <div class="live-subject" id="liveSubject">Loading...</div>
+    <div class="live-day" id="liveDay">---</div>
+</div>
 
 <table id="timetable">
 <thead>
@@ -150,9 +192,11 @@ function updateLiveTimetable() {
     else if (currentTime >= 14 && currentTime < 15) periodIndex = 6;
 
     const today = new Date().getDay();
+    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     const rows = document.querySelectorAll("#timetable tbody tr");
 
-    let liveText = "No class now";
+    let subject = "No class";
+    let dayName = days[today];
 
     rows.forEach(row => {
         row.querySelectorAll("td").forEach(td => td.classList.remove("current"));
@@ -164,18 +208,19 @@ function updateLiveTimetable() {
 
         if (cell) {
             cell.classList.add("current");
-            liveText = "Now: " + cell.innerText;
+            subject = cell.innerText;
         }
     }
 
-    const timeString = now.toLocaleTimeString();
-    document.getElementById("liveInfo").innerText =
-        "⏰ " + timeString + " | 📘 " + liveText;
+    document.getElementById("liveSubject").innerText = subject;
+    document.getElementById("liveDay").innerText = dayName;
+    document.getElementById("liveTime").innerText = now.toLocaleTimeString();
 }
 
 setInterval(updateLiveTimetable, 1000);
 updateLiveTimetable();
 </script>
+
 
 </body>
 </html>
