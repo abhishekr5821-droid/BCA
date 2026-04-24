@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Syllabus Manager</title>
 
-    <style>
+<style>
 body {
     font-family: Arial;
     background: radial-gradient(circle at top, #0f2027, #0b0c1a);
@@ -93,7 +93,7 @@ input {
 
 <body>
 
-    <h1>SYLLABUS</h1>
+<h1>SYLLABUS</h1>
 
 <div class="container">
 
@@ -120,7 +120,7 @@ input {
             </div>
         {% endif %}
 
-        <!-- ADMIN ACTIONS -->
+        <!-- ACTIONS -->
         <div class="actions">
             <a href="{% url 'edit_syllabus' item.id %}">
                 <button class="edit-btn">Edit</button>
@@ -142,46 +142,6 @@ input {
     </a>
 
 </div>
-            </div>
-
-            <div class="actions">
-                <!-- ✏️ EDIT -->
-                <a href="{% url 'edit_syllabus' item.id %}">
-                    <button class="edit-btn">Edit</button>
-                </a>
-
-                <!-- ❌ DELETE -->
-                <form action="{% url 'delete_syllabus' item.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit" class="delete-btn">Delete</button>
-                </form>
-            </div>
-
-        </div>
-    {% empty %}
-        <p>No syllabus added yet.</p>
-    {% endfor %}
-<!-- 🔽 OLD SIMPLE LIST (KEPT AS YOU ASKED) -->
-<h2>📜 Simple List View</h2>
-
-{% for item in data %}
-    <div class="card">
-
-        <span>{{ item.title }}</span>
-
-        <div class="actions">
-            <a href="{% url 'edit_syllabus' item.id %}">
-                <button class="edit-btn">Edit</button>
-            </a>
-
-            <form action="{% url 'delete_syllabus' item.id %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" class="delete-btn">Delete</button>
-            </form>
-        </div>
-
-    </div>
-{% endfor %}
 
 </body>
 </html>
