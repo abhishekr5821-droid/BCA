@@ -132,9 +132,9 @@ button {
     <button>🏠 Go to Home</button>
 </a>
 
-<!-- ONLY CLEAN SCRIPT KEPT -->
+<!-- ✅ ONLY WORKING SCRIPT -->
 <script>
-function highlightCurrentPeriod() {
+function updateLiveTimetable() {
     const now = new Date();
     const hours = now.getHours();
     const minutes = now.getMinutes();
@@ -152,6 +152,8 @@ function highlightCurrentPeriod() {
     const today = new Date().getDay();
     const rows = document.querySelectorAll("#timetable tbody tr");
 
+    let liveText = "No class now";
+
     rows.forEach(row => {
         row.querySelectorAll("td").forEach(td => td.classList.remove("current"));
     });
@@ -159,14 +161,20 @@ function highlightCurrentPeriod() {
     if (today >= 1 && today <= 5 && periodIndex !== -1) {
         const row = rows[today - 1];
         const cell = row.children[periodIndex];
+
         if (cell) {
             cell.classList.add("current");
+            liveText = "Now: " + cell.innerText;
         }
     }
+
+    const timeString = now.toLocaleTimeString();
+    document.getElementById("liveInfo").innerText =
+        "⏰ " + timeString + " | 📘 " + liveText;
 }
 
-setInterval(highlightCurrentPeriod, 60000);
-highlightCurrentPeriod();
+setInterval(updateLiveTimetable, 1000);
+updateLiveTimetable();
 </script>
 
 </body>
