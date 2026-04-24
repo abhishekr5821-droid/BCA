@@ -1,5 +1,4 @@
-{% load static %}
-{% load custom_tags %}  
+{% load static %} 
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,7 +44,6 @@ input {
     text-align: center;
 }
 
-
 button {
     padding: 8px 12px;
     margin: 5px;
@@ -74,10 +72,58 @@ button {
     <th>2-3</th>
 </tr>
 </thead>
-<tbody></tbody>
+<tbody>
+<tr>
+    <th>Monday</th>
+    <td>Maths</td>
+    <td>Physics</td>
+    <td>Chemistry</td>
+    <td class="lunch">Lunch</td>
+    <td>English</td>
+    <td>CS</td>
+</tr>
+
+<tr>
+    <th>Tuesday</th>
+    <td>Biology</td>
+    <td>Maths</td>
+    <td>Physics</td>
+    <td class="lunch">Lunch</td>
+    <td>Lab</td>
+    <td>English</td>
+</tr>
+
+<tr>
+    <th>Wednesday</th>
+    <td>Chemistry</td>
+    <td>CS</td>
+    <td>Maths</td>
+    <td class="lunch">Lunch</td>
+    <td>Physics</td>
+    <td>Sports</td>
+</tr>
+
+<tr>
+    <th>Thursday</th>
+    <td>English</td>
+    <td>Biology</td>
+    <td>Maths</td>
+    <td class="lunch">Lunch</td>
+    <td>CS</td>
+    <td>Lab</td>
+</tr>
+
+<tr>
+    <th>Friday</th>
+    <td>Physics</td>
+    <td>Chemistry</td>
+    <td>English</td>
+    <td class="lunch">Lunch</td>
+    <td>Maths</td>
+    <td>CS</td>
+</tr>
+</tbody>
 </table>
-
-
 
 <div id="syllabusContainer"></div>
 
@@ -85,65 +131,8 @@ button {
     <button>🏠 Go to Home</button>
 </a>
 
+<!-- ONLY CLEAN SCRIPT KEPT -->
 <script>
-
-constdays = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
-consttbody = document.querySelector("#timetable tbody");
-
-// Create table
-days.forEach((day, rowIndex) => {
-
-    const tr = document.createElement("tr");
-
-    const th = document.createElement("th");
-    th.textContent = day;
-    tr.appendChild(th);
-
-    for (let col = 0; col < 6; col++) {
-
-        if (col === 3) {
-            const td = document.createElement("td");
-            td.textContent = "Lunch";
-            td.className = "lunch";
-            tr.appendChild(td);
-            continue;
-        }
-
-        const td = document.createElement("td");
-        const input = document.createElement("input");
-
-        const actualCol = col > 3 ? col - 1 : col;
-        input.id = `cell-${rowIndex}-${actualCol}`;
-        input.addEventListener("input", saveData);
-
-        td.appendChild(input);
-        tr.appendChild(td);
-    }
-
-    tbody.appendChild(tr);
-});
-
-/* -------- SAVE -------- */
-function saveData() {
-    let data = {};
-    document.querySelectorAll("input").forEach(input => {
-        data[input.id] = input.value;
-    });
-    localStorage.setItem("timetable", JSON.stringify(data));
-}
-
-/* -------- LOAD -------- */
-function loadData() {
-    let data = JSON.parse(localStorage.getItem("timetable")) || {};
-    document.querySelectorAll("input").forEach(input => {
-        input.value = data[input.id] || "";
-    });
-}
-
-loadData();
-
-/* -------- LIVE TIMETABLE (ADDED ONLY) -------- */
-
 function highlightCurrentPeriod() {
     const now = new Date();
     const hours = now.getHours();
@@ -153,147 +142,31 @@ function highlightCurrentPeriod() {
 
     let periodIndex = -1;
 
-    if (currentTime >= 9 && currentTime < 10) periodIndex = 0;
-    else if (currentTime >= 10 && currentTime < 11) periodIndex = 1;
-    else if (currentTime >= 11 && currentTime < 12) periodIndex = 2;
-    else if (currentTime >= 13 && currentTime < 14) periodIndex = 3;
-    else if (currentTime >= 14 && currentTime < 15) periodIndex = 4;
+    if (currentTime >= 9 && currentTime < 10) periodIndex = 1;
+    else if (currentTime >= 10 && currentTime < 11) periodIndex = 2;
+    else if (currentTime >= 11 && currentTime < 12) periodIndex = 3;
+    else if (currentTime >= 13 && currentTime < 14) periodIndex = 5;
+    else if (currentTime >= 14 && currentTime < 15) periodIndex = 6;
 
     const today = new Date().getDay();
-    const rowIndex = today - 1;
+    const rows = document.querySelectorAll("#timetable tbody tr");
 
-    document.querySelectorAll("#timetable td").forEach(td => {
-        td.classList.remove("current");
+    rows.forEach(row => {
+        row.querySelectorAll("td").forEach(td => td.classList.remove("current"));
     });
 
-    if (rowIndex >= 0 && rowIndex < 5 && periodIndex !== -1) {
-        const cell = document.querySelector(`#cell-${rowIndex}-${periodIndex}`);
+    if (today >= 1 && today <= 5 && periodIndex !== -1) {
+        const row = rows[today - 1];
+        const cell = row.children[periodIndex];
         if (cell) {
-            cell.parentElement.classList.add("current");
+            cell.classList.add("current");
         }
     }
 }
 
 setInterval(highlightCurrentPeriod, 60000);
 highlightCurrentPeriod();
-
-
-</script>
-<script>
-
-const days = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
-const tbody = document.querySelector("#timetable tbody");
-
-let isLocked = true;
-
-/* -------- CREATE TABLE -------- */
-days.forEach((day, rowIndex) => {
-
-    const tr = document.createElement("tr");
-
-    const th = document.createElement("th");
-    th.textContent = day;
-    tr.appendChild(th);
-
-    for (let col = 0; col < 6; col++) {
-
-        if (col === 3) {
-            const td = document.createElement("td");
-            td.textContent = "Lunch";
-            td.className = "lunch";
-            tr.appendChild(td);
-            continue;
-        }
-
-        const td = document.createElement("td");
-        const input = document.createElement("input");
-
-        const actualCol = col > 3 ? col - 1 : col;
-        input.id = `cell-${rowIndex}-${actualCol}`;
-
-        td.appendChild(input);
-        tr.appendChild(td);
-    }
-
-    tbody.appendChild(tr);
-});
-
-/* -------- SAVE -------- */
-function saveData() {
-    let data = {};
-    document.querySelectorAll("input").forEach(input => {
-        data[input.id] = input.value;
-    });
-    localStorage.setItem("timetable", JSON.stringify(data));
-    alert("Saved!");
-}
-
-/* -------- LOAD -------- */
-function loadData() {
-    let data = JSON.parse(localStorage.getItem("timetable")) || {};
-    document.querySelectorAll("input").forEach(input => {
-        input.value = data[input.id] || "";
-    });
-}
-
-loadData();
-
-/* -------- LOCK / UNLOCK -------- */
-function toggleEdit() {
-    isLocked = !isLocked;
-
-    document.querySelectorAll("input").forEach(input => {
-        input.disabled = isLocked;
-    });
-
-    document.getElementById("editBtn").innerText = isLocked ? "✏️ Edit" : "🔒 Lock";
-}
-
-/* -------- CURRENT PERIOD -------- */
-function highlightCurrentPeriod() {
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-
-    const currentTime = hours + minutes / 60;
-
-    let periodIndex = -1;
-
-    if (currentTime >= 9 && currentTime < 10) periodIndex = 0;
-    else if (currentTime >= 10 && currentTime < 11) periodIndex = 1;
-    else if (currentTime >= 11 && currentTime < 12) periodIndex = 2;
-    else if (currentTime >= 13 && currentTime < 14) periodIndex = 3;
-    else if (currentTime >= 14 && currentTime < 15) periodIndex = 4;
-
-    const today = new Date().getDay();
-    const rowIndex = today - 1;
-
-    document.querySelectorAll("#timetable td").forEach(td => {
-        td.classList.remove("current");
-    });
-
-    if (rowIndex >= 0 && rowIndex < 5 && periodIndex !== -1) {
-        const cell = document.querySelector(`#cell-${rowIndex}-${periodIndex}`);
-        if (cell) {
-            cell.parentElement.classList.add("current");
-        }
-    }
-}
-
-setInterval(highlightCurrentPeriod, 60000);
-highlightCurrentPeriod();
-
-</script>
-<!-- your table + buttons above -->
-
-<button onclick="toggleEdit()" id="editBtn">✏️ Edit</button>
-<button onclick="saveData()">💾 Save</button>
-
-<script>
-    // 👉 PASTE YOUR FULL CODE HERE
 </script>
 
-</body>
-</html>
 </body>
 </html>
