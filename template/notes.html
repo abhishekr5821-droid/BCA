@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Notes</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #1e1e2f;
+    color: white;
+    text-align: center;
+}
+
+.container {
+    width: 400px;
+    margin: 40px auto;
+}
+
+.note {
+    background: #2c2c3e;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>📝 Notes</h1>
+
+<div class="container">
+
+<form method="POST" action="{% url 'add_note' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="text" name="title" placeholder="Enter note title" required>
+    <input type="file" name="file">
+    <button>Add</button>
+</form>
+
+{% for item in data %}
+<div class="note">
+    <p>{{ item.title }}</p>
+
+    {% if item.file %}
+        <a href="{{ item.file.url }}" target="_blank">📄 Open</a>
+    {% endif %}
+
+    <!-- optional delete -->
+    <form action="{% url 'delete_note' item.id %}" method="POST">
+        {% csrf_token %}
+        <button>Delete</button>
+    </form>
+</div>
+{% empty %}
+<p>No notes yet</p>
+{% endfor %}
+
+<a href="{% url 'home' %}">
+    <button>🏠 Home</button>
+</a>
+
+</div>
+
+</body>
+</html>

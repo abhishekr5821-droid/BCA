@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Timetable, Syllabus
 from django.http import HttpResponse
+from .models import Note
 
 
 # ✅ HOME
@@ -92,3 +93,22 @@ def edit_syllabus(request, syllabus_id):
             syllabus.save()
             return redirect('syllabus')
     return render(request, 'edit_syllabus.html', {'syllabus': syllabus})
+def notes(request):
+    data = Note.objects.all()
+    return render(request, 'notes.html', {'data': data})
+
+
+def add_note(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        file = request.FILES.get("file")
+
+        Note.objects.create(title=title, file=file)
+
+    return redirect('notes')
+
+
+def delete_note(request, id):
+    note = Note.objects.get(id=id)
+    note.delete()
+    return redirect('notes')
